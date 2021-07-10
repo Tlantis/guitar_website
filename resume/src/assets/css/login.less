@@ -1,0 +1,55 @@
+.login_container {
+    font-family: arial;
+  }
+  .login_box {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    // backdrop-filter: blur(8px);
+    border-radius: 10px;
+    // -webkit-box-reflect: below 1px linear-gradient(transparent,#0008);
+  }
+  .login_form {
+    h3{
+      color: #fff;
+      font-size: 40px;
+    }
+    h4 {
+      // display: inline-block;
+      // height: 20px;
+      margin: 0;
+    }
+    // /deep/是一个深度选择器，能在scoped下的CSS样式影响到elementui的样式
+    /deep/.el-form-item__content{
+      // display: flex;
+      // justify-content: center;
+      // 输入框组件
+      .el-input{
+      width: 180px;
+      transition: 0.25s;
+        .el-input__inner{
+        border-radius: 21px;
+        transition: 0.25s;
+        }
+        &:focus-within{
+        width: 280px;
+        }
+      }
+      // 在element的HTML设定中，错误提示与输入框是平级关系 都是content中。
+      .el-form-item__error{
+      left:50%;
+      transform: translate(-50%, -0%);
+      }
+      // 按钮组件
+      .el-button--primary{
+      border-radius: 21px;
+      border-color: rgb(51, 51, 51);
+      background:rgb(51, 51, 51);
+        &:focus,&:hover{
+        background: rgb(94, 94, 94);
+        border-color: rgb(94, 94, 94);
+        }
+      }
+      .el-button--info{
+        border-radius: 21px;
+      }
+    }
+  }
