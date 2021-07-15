@@ -77,6 +77,7 @@ export default new Vuex.Store({
           }]
         }
       }
+      store.ChordsListOptions.push({ key: 1 }) // 作为ChordsListOptions更新凭据
     },
     initializationChordsListOptionsCustomChordChildren (store) { // 清空ChordsListOptions自定义和弦
       console.log('调用了initializationChordsListOptionsCustomChordChildren')
@@ -86,10 +87,11 @@ export default new Vuex.Store({
       for (let i = 0; i < series.length; i++) { // 循环 7 次
         store.ChordsListOptions[i].children[1] = {
           value: 'customChord',
-          label: '二次自定义和弦',
+          label: '自定义和弦',
           children: []
         }
       }
+      store.ChordsListOptions[7].key++ // 作为ChordsListOptions更新凭据
     },
     setChordsListOptions (store, [where, res]) { // 给Score组件中所需要的ChordsListOptions赋值
       var series = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
@@ -108,6 +110,7 @@ export default new Vuex.Store({
           }
         }
       }
+      store.ChordsListOptions[7].key++ // 作为ChordsListOptions更新凭据
     }
   },
   actions: {
@@ -144,7 +147,8 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    dtitle: state => state.addChord.Chord // 把addChord模块中的数据Chord包装成全局数据addChord
+    dtitle: state => state.addChord.Chord, // 把addChord模块中的数据Chord包装成全局数据addChord
+    updateChordsListOptions: state => state.ChordsListOptions[7].key
   },
   modules: {
     moduleUsers: {

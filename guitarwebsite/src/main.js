@@ -15,6 +15,8 @@ import axios from 'axios'
 axios.defaults.baseURL = 'http://127.0.0.1:3007'
 Vue.prototype.$http = axios
 
+Vue.prototype.$bus = new Vue() // event Bus 用于无关系组件间的通信。
+
 axios.interceptors.request.use(function (config) {
   // 在请求头中添加了一个Authorization，向后端发送请求的时候会将token值传过去。
   // 如果不配置请求拦截器在头信息中添加token 会弹出无效token的警告。

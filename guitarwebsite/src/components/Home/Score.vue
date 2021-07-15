@@ -6,9 +6,9 @@
           和弦选项
         <el-cascader :key="cascaderKey" v-if="cascader" :options="ChordsListOptions" ref="cascader" clearable filterable @change="chordChoise()"></el-cascader>
         </div>
-        <div>
+        <!-- <div>
           <el-button type="info"  class="addChordButton" @click="cascaderKeyChange">cascaderKey</el-button>
-        </div>
+        </div> -->
         <div>
           <el-button type="info"  class="addChordButton" @click="dialogVisible = true;">添加自定义和弦</el-button>
         </div>
@@ -61,7 +61,19 @@ export default {
   computed: {
     ...mapState(['ChordsListOptions']),
     ...mapState(['chord']),
+    ...mapGetters(['updateChordsListOptions']),
     ...mapGetters(['dtitle'])
+  },
+  watch: {
+    updateChordsListOptions (newValue) { // 监听ChordsListOptions中的更新指令.如果更新了则进行cascader组件重新渲染
+      console.log(newValue)
+      this.cascaderKeyChange()
+    },
+    token (newValue) {
+      if (this.token != null) { // 如果登录了
+        this.$store.commit('setChordsListOptions', ['customChord', '1']) // 执行设置自定义和弦的函数
+      }
+    }
   },
   created () {
     this.$store.commit('setChordsListOptions', ['chord', '0'])
@@ -71,15 +83,6 @@ export default {
       this.token = window.sessionStorage.token
     } else {
       this.token = null
-    }
-    if (this.token) { // 如果登录了
-      this.$store.commit('setChordsListOptions', ['customChord', '1']) // 执行设置自定义和弦的函数
-    }
-  },
-  watch: {
-    token () {
-      console.log('调用cascaderKeyChange')
-      this.cascaderKeyChange()
     }
   },
   methods: {
