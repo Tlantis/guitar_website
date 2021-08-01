@@ -66,7 +66,8 @@ export default {
   },
   watch: {
     updateChordsListOptions (newValue) { // 监听ChordsListOptions中的更新指令.如果更新了则进行cascader组件重新渲染
-      console.log(newValue)
+      // console.log(newValue)
+      // console.log('检测到数据更新')
       this.cascaderKeyChange()
     },
     token (newValue) {
@@ -88,7 +89,7 @@ export default {
   methods: {
     cascaderKeyChange () {
       this.cascaderKey += 1
-      console.log('cascaderKeyChange发生变化' + this.cascaderKey)
+      // console.log('cascaderKeyChange发生变化' + this.cascaderKey)
     },
     chordChoise () { // cascader选中显示和弦事件
       if (!this.$refs.cascader.getCheckedNodes()[0]) { // 如果没有选中和弦
@@ -106,7 +107,9 @@ export default {
         .catch(_ => {})
     },
     addChordConfirm () { // 添加和弦确定事件
+      console.log('点击了确认按钮 触发了addChordConfirm函数')
       this.$store.dispatch('addChord/addChordToDb') // 添加和弦到用户自定义和弦库操作
+      this.$store.dispatch('loginGetChordsList')
     }
   }
 }

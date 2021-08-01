@@ -8,17 +8,29 @@ export default new Vuex.Store({
   state: {
     chord: [],
     chordList: { // 用于存放分类好的和弦数组
-      C: [], D: [], E: [], F: [], G: [], A: [], B: []
+      C: [],
+      D: [],
+      E: [],
+      F: [],
+      G: [],
+      A: [],
+      B: []
     },
     ChordsListOptions: [], // Score组件中el-cascader联级选择器所需的数据
     customChord: [], // 用于渲染的自定义和弦数组
     customChordList: { // 用于存放分类好的自定义和弦数组
-      C: [], D: [], E: [], F: [], G: [], A: [], B: []
+      C: [],
+      D: [],
+      E: [],
+      F: [],
+      G: [],
+      A: [],
+      B: []
     },
     customChordsListOptions: [] // Score组件中el-cascader联级选择器所需的自定义和弦数据
   },
   mutations: {
-    ModifyChord (store, [data, res]) { // 初始化和弦信息函数 修改和弦符合页面渲染的格式
+    ModifyChord (store, [data, res]) { // 初始化和弦信息函数 修改和弦符合页面渲染的格式modifyChord
       store[res] = []
       var modifyChord // 用来暂时存放该处理和弦
       for (var i = 0; i < data.length; i++) {
@@ -38,7 +50,7 @@ export default new Vuex.Store({
         modifyChord.series_id = data[i].series_id
         // 为phonemicPoint_chord数组赋值
         var phonemicPoint
-        var phonemicPointModify = data[i].phonemicPoint_chord.split('.')// 分割成六条弦的数组
+        var phonemicPointModify = data[i].phonemicPoint_chord.split('.') // 分割成六条弦的数组
         var phonemicPointArray
         for (var j = 0; j < phonemicPointModify.length; j++) { // 该for循环赋值单个和弦的信息.
           phonemicPoint = { id: 0, point: '0', grades: [0, 0, 0, 0, 0], chordName: '' }
@@ -49,15 +61,26 @@ export default new Vuex.Store({
           phonemicPoint.chordName = phonemicPointArray[3]
           modifyChord.phonemicPoint_chord.push(phonemicPoint)
         }
-        store[res].push(modifyChord)// 将处理好的单个和弦数据push到data中.
+        store[res].push(modifyChord) // 将处理好的单个和弦数据push到data中.
       }
       this.commit('ModifychordList', res)
     },
     ModifychordList (store, res) { // 修改chordList函数将和弦分类放入和弦数组中 供setChordsListOptions使用
+      console.log('调用了ModifychordList函数为customChordList赋值')
+      store.customChordList = { // 清空customChordList重新赋值
+        C: [],
+        D: [],
+        E: [],
+        F: [],
+        G: [],
+        A: [],
+        B: []
+      }
       for (let i = 0; i < store[res].length; i++) { // 以series为依据分类存储和弦
         var series = store[res][i].series // 和弦系列(C系列)
-        var seriesId = store[res][i].series_id // 在系列中的id
-        store[res + 'List'][series][seriesId] = store[res][i] // 赋值操作
+        // var seriesId = store[res][i].series_id // 在系列中的id
+        // store[res + 'List'][series][seriesId] = store[res][i] // 赋值操作
+        store[res + 'List'][series].push(store[res][i])
       }
     },
     initializationChordsListOptions (store) { // 初始化ChordsListOptions操作
@@ -94,6 +117,7 @@ export default new Vuex.Store({
       store.ChordsListOptions[7].key++ // 作为ChordsListOptions更新凭据
     },
     setChordsListOptions (store, [where, res]) { // 给Score组件中所需要的ChordsListOptions赋值
+      console.log('调用了ChordsListOptions赋值函数')
       var series = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
       var chordList = store[where + 'List']
       for (let i = 0; i < series.length; i++) { // 循环 7 次
@@ -127,12 +151,12 @@ export default new Vuex.Store({
         })
     },
     loginGetChordsList (context) { // 登录后获取自定义和弦的异步函数
+      console.log('触发了loginGetChordsList函数')
       var username = {
         username: window.sessionStorage.username
       }
       const Qs = require('qs')
       var usernameJsonStr = Qs.stringify(username) // 将数据转变为json字符串
-      console.log(usernameJsonStr)
       axios.post('/chord/getCustomChordlist', usernameJsonStr)
         .then(res => {
           if (res.status !== 200) {
@@ -142,7 +166,7 @@ export default new Vuex.Store({
           const data = res.data.data
           const who = 'customChord'
           context.commit('ModifyChord', [data, who]) // 调用ModifyChordlist处理和弦
-          context.commit('setChordsListOptions', ['customChord', '1']) // 登录之后再调用 ChordsListOptions赋值函数
+          context.commit('setChordsListOptions', ['customChord', '1']) // 登录之后再调用ChordsListOptions赋值函数
         })
     }
   },
@@ -164,8 +188,7 @@ export default new Vuex.Store({
           store.user = null
         }
       },
-      actions: {
-      },
+      actions: {},
       getters: {}
     },
     // 子模块
@@ -174,7 +197,7 @@ export default new Vuex.Store({
       state: {
         Chord: { // 存放和弦信息的数组 修改完的和弦存放于此
           name_chord: 'C', // 和弦名称
-          phonemicPoint_chord: [// 和弦组成数组
+          phonemicPoint_chord: [ // 和弦组成数组
             { id: 1, point: '0', grades: [0, 0, 0, 0, 0], EmptyScale: 5, chordName: '5' },
             { id: 2, point: '', grades: [1, 0, 0, 0, 0], EmptyScale: 12, chordName: '1' },
             { id: 3, point: '0', grades: [0, 0, 0, 0, 0], EmptyScale: 8, chordName: '8' },
@@ -190,7 +213,7 @@ export default new Vuex.Store({
         initializationAddChord (store) { // 初始化和弦信息函数 将Chord还原 供Score组件中的重置按钮使用
           store.Chord = { // 存放和弦信息的数组
             name_chord: 'C', // 和弦名称
-            phonemicPoint_chord: [// 和弦组成数组
+            phonemicPoint_chord: [ // 和弦组成数组
               { id: 1, point: '0', grades: [0, 0, 0, 0, 0], EmptyScale: 5, chordName: '5' },
               { id: 2, point: '', grades: [1, 0, 0, 0, 0], EmptyScale: 12, chordName: '1' },
               { id: 3, point: '0', grades: [0, 0, 0, 0, 0], EmptyScale: 8, chordName: '8' },
